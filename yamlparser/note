@@ -1,6 +1,0 @@
-{'items':
-      [
-          {'name': 'Alice', 'tags': ['pyt:hon', 'go'], 'meta': {'active': 'true', 'score': 'null'}},
-          {'name': 'Bob', 'tags': None, 'meta': None}
-      ]
-}

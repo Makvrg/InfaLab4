@@ -1,7 +1,7 @@
-from typing import List, Dict, Tuple, Union
+from typing import List, Dict, Tuple, Union, Any
 
-from yamlparser.Token import Token
-from yamlparser.YAMLTokenizer import YAMLTokenizer
+from main.deserializer.Token import Token
+from main.deserializer.YAMLTokenizer import YAMLTokenizer
 
 
 class YAMLDeserializer:
@@ -90,24 +90,27 @@ class YAMLDeserializer:
                 )
 
     @staticmethod
-    def deserialize(yaml_text: str):
-        tokens: List[Token] = YAMLTokenizer.tokenize(yaml_text)
+    def deserialize(yaml_text: str) -> Tuple[Any, List[str]]:
+        tokens, comments = YAMLTokenizer.tokenize(yaml_text)
 
         if tokens[0].type == "SCALAR":
-            python_object: str = str(tokens[0].value)
+            if isinstance(tokens[0].value, str):
+                python_object = str(tokens[0].value)
+            elif isinstance(tokens[0].value, bool):
+                python_object = tokens[0].value
+            elif tokens[0].value is None:
+                python_object = None
             if len(tokens) != 1:
                 raise ValueError(f"Неверная структура данных: {yaml_text}")
         elif tokens[0].type == "BLOCK_SEQUENCE_START":
             python_object, step = (
                 YAMLDeserializer.__deserialize_sequence(tokens[1:])
             )
-            print("SEQ count tokens:", step + 1)
         elif tokens[0].type == "BLOCK_MAPPING_START":
             python_object, step = (
                 YAMLDeserializer.__deserialize_mapping(tokens[1:])
             )
-            print("MAP count tokens:", step + 1)
         else:
             raise ValueError(f"Неверная структура данных: {yaml_text}")
 
-        return python_object
+        return python_object, comments

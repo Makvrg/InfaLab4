@@ -1,18 +1,18 @@
-from typing import List
+from typing import List, Tuple
 
-from yamlparser.Token import Token
-from yamlparser.YAMLLineHandler import YAMLLineHandler
+from main.deserializer.Token import Token
+from main.deserializer.YAMLLineHandler import YAMLLineHandler
 
 
 class YAMLTokenizer:
 
     @staticmethod
-    def tokenize(yaml_text: str):
+    def tokenize(yaml_text: str) -> Tuple[List[Token], List[str]]:
         tokens: List[Token] = []
         indent_stack: List[int] = [0]
         block_stack: List[str] = []
 
-        lines = [line for line in YAMLLineHandler.clean_comments(yaml_text)]
+        lines, comments = YAMLLineHandler.cut_comments(yaml_text)
 
         for line in lines:
 
@@ -35,7 +35,6 @@ class YAMLTokenizer:
                     block_stack.append("sequence")
                     indent_stack.append(indent)
 
-                #tokens.append(Token("BLOCK_ENTRY"))
                 escaped_sequence_line = escaped_sequence_line[1:].strip()
 
                 if ":" in escaped_sequence_line:
@@ -48,17 +47,12 @@ class YAMLTokenizer:
                               YAMLLineHandler
                               .replace_special_sequence(key.strip()))
                     )
-                    #tokens.append(Token("VALUE"))
                     if val.strip():
                         tokens.append(
                             Token("SCALAR",
                                   YAMLLineHandler
                                   .replace_special_sequence(val.strip()))
                         )
-                        #tokens.append(Token("BLOCK_END"))
-                    #else:
-                        # block_stack.append("mapping")
-                        # indent_stack.append(indent + 2)
                 elif escaped_sequence_line:
                     tokens.append(
                         Token("SCALAR",
@@ -80,15 +74,12 @@ class YAMLTokenizer:
                           YAMLLineHandler
                           .replace_special_sequence(key.strip()))
                 )
-                #tokens.append(Token("VALUE"))
                 if val.strip():
                     tokens.append(
                         Token("SCALAR",
                               YAMLLineHandler
                               .replace_special_sequence(val.strip()))
                     )
-                # else:
-                #     indent_stack.append(indent + 2)
 
             # Вся введённая структура является скаляром или неверна
             else:
@@ -98,7 +89,7 @@ class YAMLTokenizer:
                               YAMLLineHandler
                               .replace_special_sequence(line.strip()))
                     )
-                    return tokens
+                    return tokens, comments
                 else:
                     raise ValueError(f"Неверная введённая структура: {yaml_text}")
 
@@ -107,4 +98,4 @@ class YAMLTokenizer:
             block_stack.pop()
             tokens.append(Token("BLOCK_END"))
 
-        return tokens
+        return tokens, comments
