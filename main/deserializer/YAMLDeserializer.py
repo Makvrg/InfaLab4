@@ -89,6 +89,7 @@ class YAMLDeserializer:
                     + f"value={current_token.value}"
                 )
 
+
     @staticmethod
     def deserialize(yaml_text: str) -> Tuple[Any, List[str]]:
         tokens, comments = YAMLTokenizer.tokenize(yaml_text)

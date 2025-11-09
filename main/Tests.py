@@ -2,6 +2,7 @@ from main.deserializer.YAMLDeserializerWithLib import YAMLDeserializerWithLib
 from main.serializer.INISerializer import INISerializer
 from main.deserializer.YAMLDeserializer import YAMLDeserializer
 from main.serializer.INISerializerWithLib import INISerializerWithLib
+from main.serializer.XMLSerializer import XMLSerializer
 
 yaml_text1 = """
 items:
@@ -43,11 +44,13 @@ national:
 # print("my :", python_object_my)
 
 data = {
-    "database": {"driver": {"1": True, "2": "b"}, "host": "localhost", "active": True, "password": None},
+    "database": {"driver": {"one": True, "two": "b"}, "host": "localhost", "active": True, "password": None},
     "user": {"name": "Alice", "role": "admin"}
 }
 
-print(INISerializer.serialize(data, ["ss", 'dkmd ']))
-print()
-ini_text = INISerializerWithLib.serialize(data, ["ss", "dkmd"])
-print(ini_text)
+# print(INISerializer.serialize(data, ["ss", 'dkmd ']))
+# print()
+# ini_text = INISerializerWithLib.serialize(data, ["ss", "dkmd"])
+# print(ini_text)
+
+print(XMLSerializer.serialize(YAMLDeserializer.deserialize(yaml_text1)[0], ["ikp", "com"]))

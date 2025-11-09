@@ -53,9 +53,6 @@ class INISerializer:
 
         ini_text += "[serialized]\n"
 
-        if isinstance(python_object, str):
-            ini_text += f'0 = "{python_object}"\n'
-
         if python_object is True:
             ini_text += f'0 = true\n'
         elif python_object is False:

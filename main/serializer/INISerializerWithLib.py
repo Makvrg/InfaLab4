@@ -41,10 +41,11 @@ class INISerializerWithLib:
                 )
         return flat
 
+
     @staticmethod
     def serialize(python_object: Any, comments: List[str] = []) -> str:
         cfg = configparser.ConfigParser()
-        section_name = "serialized"
+        section_name: str = "serialized"
         cfg.add_section(section_name)
 
         if isinstance(python_object, dict):
