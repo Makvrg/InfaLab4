@@ -25,8 +25,6 @@ class INISerializerWithLib:
                 flat[inner_root] = "true" if value else "false"
             elif value is None:
                 flat[inner_root] = ""
-            elif isinstance(value, str):
-                flat[inner_root] = value
             elif isinstance(value, dict):
                 flat.update(INISerializerWithLib.__serialize_with_key_value(value.items(),
                                                                             inner_root)
@@ -36,9 +34,7 @@ class INISerializerWithLib:
                                                                             inner_root)
                             )
             else:
-                raise ValueError(
-                    f"Получен некорректный тип бинарного внутреннего объекта: {type(value)}"
-                )
+                flat[inner_root] = str(value)
         return flat
 
 

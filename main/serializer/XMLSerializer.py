@@ -24,15 +24,12 @@ class XMLSerializer:
 
             inner_xml_text += " " * indent + f"<{key}>"
 
-            if type(value) in [bool, NoneType, str]:
-                if value is True:
-                    inner_xml_text += f"true</{key}>\n"
-                elif value is False:
-                    inner_xml_text += f"false</{key}>\n"
-                elif value is None:
-                    inner_xml_text += f"</{key}>\n"
-                else:
-                    inner_xml_text += f"{value}</{key}>\n"
+            if value is True:
+                inner_xml_text += f"true</{key}>\n"
+            elif value is False:
+                inner_xml_text += f"false</{key}>\n"
+            elif value is None:
+                inner_xml_text += f"</{key}>\n"
             elif isinstance(value, dict):
                 inner_xml_text += "\n" + XMLSerializer.__serialize_mapping(value,
                                                                            indent + 2)
@@ -42,9 +39,7 @@ class XMLSerializer:
                                                                             indent + 2)
                 inner_xml_text += " " * indent + f"</{key}>\n"
             else:
-                raise ValueError(
-                    f"Получен некорректный тип бинарного внутреннего объекта: {type(value)}"
-                )
+                inner_xml_text += f"{value}</{key}>\n"
 
         return inner_xml_text
 

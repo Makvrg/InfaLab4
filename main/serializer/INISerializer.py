@@ -21,15 +21,12 @@ class INISerializer:
 
             inner_root = f"{root}.{key}" if root else str(key)
 
-            if type(value) in [bool, NoneType, str]:
-                if value is True:
-                    inner_ini_text += f'{inner_root} = true\n'
-                elif value is False:
-                    inner_ini_text += f'{inner_root} = false\n'
-                elif value is None:
-                    inner_ini_text += f'{inner_root} = \n'
-                else:
-                    inner_ini_text += f'{inner_root} = {value}\n'
+            if value is True:
+                inner_ini_text += f'{inner_root} = true\n'
+            elif value is False:
+                inner_ini_text += f'{inner_root} = false\n'
+            elif value is None:
+                inner_ini_text += f'{inner_root} = \n'
             elif isinstance(value, dict):
                 inner_ini_text += INISerializer.__serialize_mapping(value,
                                                                     inner_root)
@@ -37,9 +34,7 @@ class INISerializer:
                 inner_ini_text += INISerializer.__serialize_sequence(value,
                                                                      inner_root)
             else:
-                raise ValueError(
-                    f"Получен некорректный тип бинарного внутреннего объекта: {type(value)}"
-                )
+                inner_ini_text += f'{inner_root} = {value}\n'
 
         return inner_ini_text
 
