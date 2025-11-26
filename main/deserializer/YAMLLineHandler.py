@@ -1,4 +1,3 @@
-import re
 from typing import List, Tuple
 
 
@@ -66,19 +65,22 @@ class YAMLLineHandler:
         return output_line
 
     @staticmethod
-    def replace_special_sequence(val: str):
-        if re.search(r'^(?:null|~)$', val, flags=re.IGNORECASE):
+    def replace_special_sequence(value: str):
+        is_null_sequences: List[str] = ["null", "NULL", "Null", "~"]
+        is_true_sequences: List[str] = ["true", "TRUE", "True", "yes", "YES", "Yes", "on", "ON", "On"]
+        is_false_sequences: List[str] = ["false", "FALSE", "False", "no", "NO", "No", "off", "OFF", "Off"]
+        if value in is_null_sequences:
             return None
-        if re.search(r'^(?:true|yes|on|y)$', val, flags=re.IGNORECASE):
+        if value in is_true_sequences:
             return True
-        if re.search(r'^(?:false|no|off|n)$', val, flags=re.IGNORECASE):
+        if value in is_false_sequences:
             return False
-        while ("|*_tWoPoInT_*|" in val or "|*_sHoRtLiNe_*|" in val
-               or "|*_sTaRtSeQ_*|" in val or "|*_eNdSeQ_*|" in val
-               or "|*_hAsHtAg_*|" in val):
-            val = val.replace("|*_tWoPoInT_*|", ":")
-            val = val.replace("|*_sHoRtLiNe_*|", "-")
-            val = val.replace("|*_hAsHtAg_*|", "#")
-            val = val.replace("|*_sTaRtSeQ_*|", "")
-            val = val.replace("|*_eNdSeQ_*|", "")
-        return val
+        while ("|*_tWoPoInT_*|" in value or "|*_sHoRtLiNe_*|" in value
+               or "|*_sTaRtSeQ_*|" in value or "|*_eNdSeQ_*|" in value
+               or "|*_hAsHtAg_*|" in value):
+            value = value.replace("|*_tWoPoInT_*|", ":")
+            value = value.replace("|*_sHoRtLiNe_*|", "-")
+            value = value.replace("|*_hAsHtAg_*|", "#")
+            value = value.replace("|*_sTaRtSeQ_*|", "")
+            value = value.replace("|*_eNdSeQ_*|", "")
+        return value

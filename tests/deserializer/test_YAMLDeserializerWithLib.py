@@ -1,12 +1,12 @@
-from typing import List, Any
+from typing import Any
 
 import pytest
 
-from main.deserializer.YAMLDeserializer import YAMLDeserializer
+from main.deserializer.YAMLDeserializerWithLib import YAMLDeserializerWithLib
 
 
 @pytest.mark.parametrize(
-    "yaml_text, expected_python_object, expected_comments",
+    "yaml_text, expected_python_object",
     [
         (
 """american:
@@ -20,8 +20,7 @@ national: # Comment 2
                 {
                     "american": ["Boston Red Sox", "Detroit Tigers", "New York Yankees"],
                     "national": ["New York Mets", "Chicago Cubs", "Atlanta Braves"]
-                },
-                ["Comment 1", "Comment 2"]
+                }
         ),
         (
 """
@@ -50,13 +49,11 @@ items:
                             "meta": None
                         }
                     ]
-                },
-            ["1", "2", "3 comment"]
+                }
         )
     ]
 )
-def test_yaml_deserializer(yaml_text: str,
-                           expected_python_object: Any,
-                           expected_comments: List[str]):
-    python_object, comments = YAMLDeserializer.deserialize(yaml_text)
-    assert python_object == expected_python_object and comments == expected_comments
+def test_yaml_deserializer_with_lib(yaml_text: str,
+                                    expected_python_object: Any):
+    python_object = YAMLDeserializerWithLib.deserialize(yaml_text)
+    assert python_object == expected_python_object

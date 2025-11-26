@@ -27,9 +27,9 @@ class INISerializer:
                 elif value is False:
                     inner_ini_text += f'{inner_root} = false\n'
                 elif value is None:
-                    inner_ini_text += f'{inner_root} =\n'
+                    inner_ini_text += f'{inner_root} = \n'
                 else:
-                    inner_ini_text += f'{inner_root} = "{value}"\n'
+                    inner_ini_text += f'{inner_root} = {value}\n'
             elif isinstance(value, dict):
                 inner_ini_text += INISerializer.__serialize_mapping(value,
                                                                     inner_root)
@@ -58,9 +58,9 @@ class INISerializer:
         elif python_object is False:
             ini_text += f'0 = false\n'
         elif python_object is None:
-            ini_text += f'0 =\n'
+            ini_text += f'0 = \n'
         elif isinstance(python_object, str):
-            ini_text += f'0 = "{python_object}"\n'
+            ini_text += f'0 = {python_object}\n'
 
         elif type(python_object) == dict:
             ini_text += INISerializer.__serialize_mapping(python_object)

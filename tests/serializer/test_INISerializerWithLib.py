@@ -2,7 +2,7 @@ from typing import List, Any
 
 import pytest
 
-from main.serializer.INISerializer import INISerializer
+from main.serializer.INISerializerWithLib import INISerializerWithLib
 
 
 @pytest.mark.parametrize(
@@ -57,8 +57,8 @@ items.1.meta =
          )
     ]
 )
-def test_ini_serializer(python_object: Any,
-                        comments: List[str],
-                        expected_ini_text: str):
-    ini_text: str = INISerializer.serialize(python_object, comments)
+def test_ini_serializer_with_lib(python_object: Any,
+                                 comments: List[str],
+                                 expected_ini_text: str):
+    ini_text: str = INISerializerWithLib.serialize(python_object, comments)
     assert ini_text == expected_ini_text

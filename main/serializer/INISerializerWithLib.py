@@ -26,7 +26,7 @@ class INISerializerWithLib:
             elif value is None:
                 flat[inner_root] = ""
             elif isinstance(value, str):
-                flat[inner_root] = '"' + value + '"'
+                flat[inner_root] = value
             elif isinstance(value, dict):
                 flat.update(INISerializerWithLib.__serialize_with_key_value(value.items(),
                                                                             inner_root)
@@ -73,4 +73,4 @@ class INISerializerWithLib:
         for comment in comments:
             ini_text += f"; {comment}\n"
         ini_text += buf.getvalue()
-        return ini_text
+        return ini_text[:-1]
